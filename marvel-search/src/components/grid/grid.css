@@ -1,0 +1,16 @@
+main {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.character-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.character__info {
+  display: flex;
+  justify-content: space-between;
+}
