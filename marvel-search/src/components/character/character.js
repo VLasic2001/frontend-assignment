@@ -7,12 +7,24 @@ class Character extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bookmarked: false,
+      bookmarked: localStorage.getItem(props.id) !== null,
+      id: props.id,
       name: props.name,
       imagePath: props.imagePath
     };
   }
   handleBookmarkclick() {
+    if (!this.state.bookmarked) {
+      localStorage.setItem(
+        this.state.id,
+        JSON.stringify({
+          name: this.state.name,
+          imagePath: this.state.imagePath
+        })
+      );
+    } else {
+      localStorage.removeItem(this.state.id);
+    }
     this.setState({ bookmarked: !this.state.bookmarked });
   }
   render() {
@@ -24,12 +36,19 @@ class Character extends Component {
         <div className="character__info">
           <p>{this.state.name}</p>
           <img
+            alt="bookmark"
             className="character__info__bookmark"
-            src={this.state.bookmarked ? bookmarkFilled : bookmark}
+            src={
+              localStorage.getItem(this.state.id) ? bookmarkFilled : bookmark
+            }
             onClick={() => this.handleBookmarkclick()}
           ></img>
         </div>
-        <img className="character__image" src={this.state.imagePath}></img>
+        <img
+          alt={this.state.name}
+          className="character__image"
+          src={this.state.imagePath}
+        ></img>
       </div>
     );
   }
