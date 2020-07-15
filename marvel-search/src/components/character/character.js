@@ -3,25 +3,7 @@ import "./character.css";
 import bookmark from "../../images/bookmark.svg";
 import bookmarkFilled from "../../images/bookmark-filled.svg";
 
-const Character = ({ id, name, thumbnail }) => {
-  const [bookmarked, setBookmarked] = useState(
-    localStorage.getItem(id) !== null
-  );
-
-  const handleBookmarkclick = () => {
-    if (!bookmarked) {
-      localStorage.setItem(
-        id,
-        JSON.stringify({
-          name: name,
-          thumbnail: thumbnail
-        })
-      );
-    } else {
-      localStorage.removeItem(id);
-    }
-    setBookmarked(!bookmarked);
-  };
+const Character = ({ id, name, thumbnail, handleBookmark }) => {
   if (name === null) {
     return <div />;
   }
@@ -33,7 +15,7 @@ const Character = ({ id, name, thumbnail }) => {
           alt="bookmark"
           className="character__info__bookmark"
           src={localStorage.getItem(id) ? bookmarkFilled : bookmark}
-          onClick={() => handleBookmarkclick()}
+          onClick={() => handleBookmark(id, name, thumbnail)}
         ></img>
       </div>
       <img

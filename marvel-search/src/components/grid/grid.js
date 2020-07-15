@@ -7,13 +7,19 @@ const Grid = props => {
 
   useEffect(() => {
     setCharacters(props.characters);
-  }, []);
+  }, [props.characters]);
 
   return (
     <div className="character-grid">
       {characters.map((c, i) => {
         return (
-          <Character key={i} id={c.id} name={c.name} thumbnail={c.thumbnail} />
+          <Character
+            handleBookmark={props.handleBookmark}
+            key={i}
+            id={c.id}
+            name={c.name}
+            thumbnail={c.thumbnail}
+          />
         );
       })}
     </div>
