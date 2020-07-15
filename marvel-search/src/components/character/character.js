@@ -1,57 +1,48 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import "./character.css";
 import bookmark from "../../images/bookmark.svg";
 import bookmarkFilled from "../../images/bookmark-filled.svg";
 
-class Character extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      bookmarked: localStorage.getItem(props.id) !== null,
-      id: props.id,
-      name: props.name,
-      imagePath: props.imagePath
-    };
-  }
-  handleBookmarkclick() {
-    if (!this.state.bookmarked) {
+const Character = ({ id, name, thumbnail }) => {
+  const [bookmarked, setBookmarked] = useState(
+    localStorage.getItem(id) !== null
+  );
+
+  const handleBookmarkclick = () => {
+    if (!bookmarked) {
       localStorage.setItem(
-        this.state.id,
+        id,
         JSON.stringify({
-          name: this.state.name,
-          imagePath: this.state.imagePath
+          name: name,
+          thumbnail: thumbnail
         })
       );
     } else {
-      localStorage.removeItem(this.state.id);
+      localStorage.removeItem(id);
     }
-    this.setState({ bookmarked: !this.state.bookmarked });
+    setBookmarked(!bookmarked);
+  };
+  if (name === null) {
+    return <div />;
   }
-  render() {
-    if (this.state.name === null) {
-      return <div />;
-    }
-    return (
-      <div>
-        <div className="character__info">
-          <p>{this.state.name}</p>
-          <img
-            alt="bookmark"
-            className="character__info__bookmark"
-            src={
-              localStorage.getItem(this.state.id) ? bookmarkFilled : bookmark
-            }
-            onClick={() => this.handleBookmarkclick()}
-          ></img>
-        </div>
+  return (
+    <div>
+      <div className="character__info">
+        <p>{name}</p>
         <img
-          alt={this.state.name}
-          className="character__image"
-          src={this.state.imagePath}
+          alt="bookmark"
+          className="character__info__bookmark"
+          src={localStorage.getItem(id) ? bookmarkFilled : bookmark}
+          onClick={() => handleBookmarkclick()}
         ></img>
       </div>
-    );
-  }
-}
+      <img
+        alt={name}
+        className="character__image"
+        src={thumbnail.path + "." + thumbnail.extension}
+      ></img>
+    </div>
+  );
+};
 
 export default Character;
