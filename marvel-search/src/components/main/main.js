@@ -1,5 +1,7 @@
 import Grid from "../grid/grid";
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { replaceCharacters } from "../../redux/actions/index";
 
 const Main = () => {
   const [characters, setCharacters] = useState([]);
@@ -7,8 +9,12 @@ const Main = () => {
   const [searchInput, setSearchInput] = useState("");
   const [bookmarksLength, setBookmarksLength] = useState();
 
+  const searchCharacters = useSelector(state => state.searchCharacters);
+  const loading = useSelector(state => state.loading);
+  const dispatch = useDispatch();
+
   const handleBookmark = (id, name, thumbnail) => {
-    if (!localStorage.getItem(id) === null) {
+    if (localStorage.getItem(id) === null) {
       localStorage.setItem(
         id,
         JSON.stringify({
@@ -33,14 +39,19 @@ const Main = () => {
       bookmarks.push(character);
     });
     setBookmarks(bookmarks);
-    // fetch(
-    //   "http://gateway.marvel.com/v1/public/characters?limit=100&ts=1&apikey=58cc968ac4a6b192cb223b4a78a312f0&hash=054aa4102d88a21aa8eb760c2e6cc8fc"
-    // )
-    //   .then(res => res.json())
-    //   .then(result => {
-    //     setCharacters(result.data.results);
-    //   });
   }, [bookmarksLength]);
+
+  useEffect(() => {
+    setCharacters(searchCharacters);
+  }, [searchCharacters]);
+
+  useEffect(() => {
+    if (searchInput === "") {
+      setCharacters([]);
+      return;
+    }
+    dispatch(replaceCharacters(searchInput));
+  }, [searchInput]);
 
   const handleInputChange = e => {
     setSearchInput(e.target.value);
@@ -56,15 +67,17 @@ const Main = () => {
           placeholder="e. g. Spider-Man"
         />
       </header>
-      {/* {console.log(bookmarks)} */}
-      {bookmarks.length > 0 && characters.length === 0 && (
-        <Grid handleBookmark={handleBookmark} characters={bookmarks}></Grid>
-      )}
-      {bookmarks.length === 0 && characters.length === 0 && (
-        <div>Loading...</div>
-      )}
-      {characters.length > 0 && (
+      {bookmarks.length > 0 &&
+        characters !== null &&
+        characters.length === 0 && (
+          <Grid handleBookmark={handleBookmark} characters={bookmarks}></Grid>
+        )}
+      {loading && <div>Loading...</div>}
+      {characters !== null && characters.length > 0 && (
         <Grid handleBookmark={handleBookmark} characters={characters}></Grid>
+      )}
+      {characters === null && (
+        <div>There are no characters that match the search</div>
       )}
     </main>
   );

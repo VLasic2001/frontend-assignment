@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./character.css";
 import bookmark from "../../images/bookmark.svg";
 import bookmarkFilled from "../../images/bookmark-filled.svg";
