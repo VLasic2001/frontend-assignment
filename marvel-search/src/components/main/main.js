@@ -53,6 +53,31 @@ const Main = () => {
     setSearchInput(e.target.value);
   };
 
+  let main = <div />;
+
+  if (bookmarks.length > 0 && characters !== null && characters.length === 0) {
+    main = (
+      <div>
+        <span>Bookmarked characters:</span>
+        <Grid handleBookmark={handleBookmark} characters={bookmarks} />
+      </div>
+    );
+  } else if (loading) {
+    main = <div>Loading...</div>;
+  } else if (characters !== null && characters.length > 0 && !loading) {
+    main = (
+      <Grid handleBookmark={handleBookmark} characters={characters}></Grid>
+    );
+  } else if (characters === null) {
+    main = <div>There are no characters that match the search</div>;
+  } else if (
+    bookmarks.length === 0 &&
+    characters !== null &&
+    characters.length === 0
+  ) {
+    main = <div>No characters are currently bookmarked</div>;
+  }
+
   return (
     <main>
       <header>
@@ -63,18 +88,7 @@ const Main = () => {
           placeholder="e. g. Spider-Man"
         />
       </header>
-      {bookmarks.length > 0 &&
-        characters !== null &&
-        characters.length === 0 && (
-          <Grid handleBookmark={handleBookmark} characters={bookmarks}></Grid>
-        )}
-      {loading && <div>Loading...</div>}
-      {characters !== null && characters.length && !loading > 0 && (
-        <Grid handleBookmark={handleBookmark} characters={characters}></Grid>
-      )}
-      {characters === null && (
-        <div>There are no characters that match the search</div>
-      )}
+      {main}
     </main>
   );
 };
