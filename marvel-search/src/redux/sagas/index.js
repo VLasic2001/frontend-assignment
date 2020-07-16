@@ -3,6 +3,10 @@ import { REPLACE_CHARACTERS } from "../constants/action-types/index.js";
 import { replaceCharactersCall } from "../actions/index";
 
 function* replaceCharactersAsync(action) {
+  if (action.searchInput === "") {
+    yield put(replaceCharactersCall([]));
+    return;
+  }
   let characters = yield call(() => {
     return fetch(
       `http://gateway.marvel.com/v1/public/characters?nameStartsWith=${action.searchInput}&limit=20&ts=1&apikey=58cc968ac4a6b192cb223b4a78a312f0&hash=054aa4102d88a21aa8eb760c2e6cc8fc`
@@ -10,6 +14,7 @@ function* replaceCharactersAsync(action) {
       .then(res => res.json())
       .then(result => result.data.results);
   });
+  console.log(characters);
   yield put(replaceCharactersCall(characters.length > 0 ? characters : null));
 }
 

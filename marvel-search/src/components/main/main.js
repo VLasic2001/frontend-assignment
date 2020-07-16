@@ -46,10 +46,6 @@ const Main = () => {
   }, [searchCharacters]);
 
   useEffect(() => {
-    if (searchInput === "") {
-      setCharacters([]);
-      return;
-    }
     dispatch(replaceCharacters(searchInput));
   }, [searchInput]);
 
@@ -73,7 +69,7 @@ const Main = () => {
           <Grid handleBookmark={handleBookmark} characters={bookmarks}></Grid>
         )}
       {loading && <div>Loading...</div>}
-      {characters !== null && characters.length > 0 && (
+      {characters !== null && characters.length && !loading > 0 && (
         <Grid handleBookmark={handleBookmark} characters={characters}></Grid>
       )}
       {characters === null && (
