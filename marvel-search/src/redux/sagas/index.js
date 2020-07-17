@@ -3,7 +3,6 @@ import { REPLACE_CHARACTERS } from "../constants/action-types/index.js";
 import { replaceCharactersCall } from "../actions/index";
 
 function* replaceCharactersAsync(action) {
-  console.log("s", action);
   if (action.payload.searchInput === "") {
     yield put(replaceCharactersCall([]));
     return;
@@ -20,7 +19,6 @@ function* replaceCharactersAsync(action) {
       .then(res => res.json())
       .then(result => result.data.results);
   });
-  console.log(characters);
   yield put(replaceCharactersCall(characters.length > 0 ? characters : null));
 }
 

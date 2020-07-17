@@ -47,7 +47,7 @@ const Main = () => {
   }, [searchCharacters]);
 
   useEffect(() => {
-    dispatch(replaceCharacters({ searchInput: searchInput, page: 1 }));
+    dispatch(replaceCharacters({ searchInput, page: 1 }));
   }, [searchInput]);
 
   const handleInputChange = e => {
