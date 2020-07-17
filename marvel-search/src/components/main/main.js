@@ -31,15 +31,18 @@ const Main = () => {
       window.confirm(`Are you sure you want to remove bookmark for "${name}"?`)
     ) {
       localStorage.removeItem(id);
+      if (localStorage.length % 20 === 0) {
+        setPageIndex(pageIndex === 1 ? 1 : pageIndex - 1);
+      }
     }
 
     setBookmarksLength(localStorage.length);
   };
 
   useEffect(() => {
-    var bookmarks = [];
+    const bookmarks = [];
     Object.keys(localStorage).forEach((k) => {
-      var character = JSON.parse(localStorage.getItem(k));
+      const character = JSON.parse(localStorage.getItem(k));
       character.id = k;
       bookmarks.push(character);
     });
@@ -109,13 +112,21 @@ const Main = () => {
       </div>
     );
   } else if (characters === null) {
-    main = <div>There are no characters that match the search</div>;
+    main = (
+      <div className="no-characters-message">
+        There are no characters that match the search.
+      </div>
+    );
   } else if (
     bookmarks.length === 0 &&
     characters !== null &&
     characters.length === 0
   ) {
-    main = <div>No characters are currently bookmarked</div>;
+    main = (
+      <div className="no-bookmarks-message">
+        No characters are currently bookmarked.
+      </div>
+    );
   }
 
   return (
@@ -129,7 +140,6 @@ const Main = () => {
           placeholder="e. g. 'Spi' or 'Spider-Man'"
         />
       </header>
-      {/* <input type="number"></input> */}
       {main}
     </main>
   );

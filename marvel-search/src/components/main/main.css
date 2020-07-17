@@ -35,7 +35,9 @@ header {
   font-weight: bold;
   font-size: 26px;
 }
-.bookmarked__characters__title {
+.bookmarked__characters__title,
+.no-characters-message,
+.no-bookmarks-message {
   display: inline-block;
   font-size: 20px;
   font-weight: 500;
