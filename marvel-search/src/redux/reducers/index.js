@@ -1,11 +1,12 @@
 import {
   REPLACE_CHARACTERS,
-  REPLACE_CHARACTERS_SUCCESS
+  REPLACE_CHARACTERS_SUCCESS,
 } from "../constants/action-types/index.js";
 
 const initialState = {
   searchCharacters: [],
-  loading: false
+  total: 0,
+  loading: false,
 };
 
 function rootReducer(state = initialState, action) {
@@ -14,7 +15,11 @@ function rootReducer(state = initialState, action) {
       state.loading = true;
       break;
     case REPLACE_CHARACTERS_SUCCESS:
-      state.searchCharacters = action.payload;
+      if (action.payload.characters === undefined) {
+        state.searchCharacters = [];
+      } else state.searchCharacters = action.payload.characters;
+      state.total =
+        action.payload.total !== undefined ? action.payload.total : 0;
       state.loading = false;
       break;
     default:

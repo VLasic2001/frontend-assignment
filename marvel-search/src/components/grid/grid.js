@@ -1,20 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./grid.css";
 import Character from "../character/character.js";
 
-const Grid = props => {
-  const [characters, setCharacters] = useState([]);
-
-  useEffect(() => {
-    setCharacters(props.characters);
-  }, [props.characters]);
-
+const Grid = ({ characters, handleBookmark }) => {
   return (
     <div className="character-grid">
       {characters.map((c, i) => {
         return (
           <Character
-            handleBookmark={props.handleBookmark}
+            handleBookmark={handleBookmark}
             key={i}
             id={c.id}
             name={c.name}

@@ -31,6 +31,7 @@ header {
   display: block;
   text-align: center;
   margin-top: 50px;
+  margin-bottom: 50px;
   font-weight: bold;
   font-size: 26px;
 }
@@ -41,7 +42,15 @@ header {
   color: white;
   padding: 10px;
 }
-
+.pagination {
+  display: flex;
+  justify-content: start;
+  flex-direction: row;
+  font-size: 20px;
+  font-weight: 500;
+  color: white;
+  padding: 10px;
+}
 @media screen and (max-width: 350px) {
   header {
     flex-direction: column;

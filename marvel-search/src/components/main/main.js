@@ -2,16 +2,20 @@ import Grid from "../grid/grid";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { replaceCharacters } from "../../redux/actions/index";
+import Pagination from "@material-ui/lab/Pagination";
 import "./main.css";
 
 const Main = () => {
   const [characters, setCharacters] = useState([]);
   const [bookmarks, setBookmarks] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  const [total, setTotal] = useState(0);
   const [bookmarksLength, setBookmarksLength] = useState();
+  const [pageIndex, setPageIndex] = useState(1);
 
-  const searchCharacters = useSelector(state => state.searchCharacters);
-  const loading = useSelector(state => state.loading);
+  const searchCharacters = useSelector((state) => state.searchCharacters);
+  const searchTotal = useSelector((state) => state.total);
+  const loading = useSelector((state) => state.loading);
   const dispatch = useDispatch();
 
   const handleBookmark = (id, name, thumbnail) => {
@@ -20,7 +24,7 @@ const Main = () => {
         id,
         JSON.stringify({
           name: name,
-          thumbnail: thumbnail
+          thumbnail: thumbnail,
         })
       );
     } else if (
@@ -34,24 +38,39 @@ const Main = () => {
 
   useEffect(() => {
     var bookmarks = [];
-    Object.keys(localStorage).forEach(k => {
+    Object.keys(localStorage).forEach((k) => {
       var character = JSON.parse(localStorage.getItem(k));
       character.id = k;
       bookmarks.push(character);
     });
-    setBookmarks(bookmarks);
-  }, [bookmarksLength]);
+    setBookmarks(bookmarks.splice((pageIndex - 1) * 20, 20));
+  }, [bookmarksLength, pageIndex]);
 
   useEffect(() => {
     setCharacters(searchCharacters);
   }, [searchCharacters]);
 
   useEffect(() => {
-    dispatch(replaceCharacters({ searchInput, page: 1 }));
-  }, [searchInput]);
+    setTotal(searchTotal);
+  }, [searchTotal]);
 
-  const handleInputChange = e => {
+  useEffect(() => {
+    if (searchInput === "" && characters.length !== 0) {
+      setPageIndex(1);
+    }
+
+    dispatch(replaceCharacters({ searchInput, page: pageIndex }));
+  }, [searchInput, pageIndex]);
+
+  const handleInputChange = (e) => {
+    if (searchInput === "") {
+      setPageIndex(1);
+    }
     setSearchInput(e.target.value);
+  };
+
+  const handlePagination = (value) => {
+    setPageIndex(value);
   };
 
   let main = <div />;
@@ -62,6 +81,14 @@ const Main = () => {
         <span className="bookmarked__characters__title">
           Bookmarked characters:
         </span>
+        <span className="pagination">
+          Page:{" "}
+          <Pagination
+            count={Math.ceil(localStorage.length / 20)}
+            page={pageIndex}
+            onChange={(e, v) => handlePagination(v)}
+          />
+        </span>
         <Grid handleBookmark={handleBookmark} characters={bookmarks} />
       </div>
     );
@@ -69,7 +96,17 @@ const Main = () => {
     main = <div className="loading">Loading...</div>;
   } else if (characters !== null && characters.length > 0 && !loading) {
     main = (
-      <Grid handleBookmark={handleBookmark} characters={characters}></Grid>
+      <div>
+        <span className="pagination">
+          Page:{" "}
+          <Pagination
+            count={Math.ceil(total / 20)}
+            page={pageIndex}
+            onChange={(e, v) => handlePagination(v)}
+          />
+        </span>
+        <Grid handleBookmark={handleBookmark} characters={characters}></Grid>
+      </div>
     );
   } else if (characters === null) {
     main = <div>There are no characters that match the search</div>;
@@ -87,7 +124,7 @@ const Main = () => {
         <span className="search--title">Search: </span>
         <input
           className="search--input"
-          onChange={e => handleInputChange(e)}
+          onChange={(e) => handleInputChange(e)}
           value={searchInput}
           placeholder="e. g. 'Spi' or 'Spider-Man'"
         />
