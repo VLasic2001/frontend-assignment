@@ -55,7 +55,7 @@ const Main = () => {
   }, [searchTotal]);
 
   useEffect(() => {
-    if (searchInput === "" && characters.length !== 0) {
+    if (searchInput === "" && characters !== null && characters.length !== 0) {
       setPageIndex(1);
     }
 

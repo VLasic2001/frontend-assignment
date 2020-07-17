@@ -11,7 +11,7 @@ function* replaceCharactersAsync(action) {
   let total = 0;
   yield call(() => {
     return fetch(
-      `http://gateway.marvel.com/v1/public/characters?offset=${
+      `https://gateway.marvel.com/v1/public/characters?offset=${
         (action.payload.page - 1) * 20
       }&nameStartsWith=${
         action.payload.searchInput
