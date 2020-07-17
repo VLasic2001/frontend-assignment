@@ -8,9 +8,9 @@ const Character = ({ id, name, thumbnail, handleBookmark }) => {
     return <div />;
   }
   return (
-    <div>
+    <div className="character">
       <div className="character__info">
-        <p>{name}</p>
+        <span className="character__info__name">{name}</span>
         <img
           alt="bookmark"
           className="character__info__bookmark"
@@ -18,11 +18,13 @@ const Character = ({ id, name, thumbnail, handleBookmark }) => {
           onClick={() => handleBookmark(id, name, thumbnail)}
         ></img>
       </div>
-      <img
-        alt={name}
-        className="character__image"
-        src={thumbnail.path + "." + thumbnail.extension}
-      ></img>
+      <span className="character__image--container">
+        <img
+          alt={name}
+          className="character__image"
+          src={thumbnail.path + "." + thumbnail.extension}
+        ></img>
+      </span>
     </div>
   );
 };

@@ -9,6 +9,7 @@ const initialState = {
 };
 
 function rootReducer(state = initialState, action) {
+  console.log("r", action);
   switch (action.type) {
     case REPLACE_CHARACTERS:
       state.loading = true;

@@ -2,6 +2,7 @@ import Grid from "../grid/grid";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { replaceCharacters } from "../../redux/actions/index";
+import "./main.css";
 
 const Main = () => {
   const [characters, setCharacters] = useState([]);
@@ -46,7 +47,7 @@ const Main = () => {
   }, [searchCharacters]);
 
   useEffect(() => {
-    dispatch(replaceCharacters(searchInput));
+    dispatch(replaceCharacters({ searchInput: searchInput, page: 1 }));
   }, [searchInput]);
 
   const handleInputChange = e => {
@@ -58,12 +59,14 @@ const Main = () => {
   if (bookmarks.length > 0 && characters !== null && characters.length === 0) {
     main = (
       <div>
-        <span>Bookmarked characters:</span>
+        <span className="bookmarked__characters__title">
+          Bookmarked characters:
+        </span>
         <Grid handleBookmark={handleBookmark} characters={bookmarks} />
       </div>
     );
   } else if (loading) {
-    main = <div>Loading...</div>;
+    main = <div className="loading">Loading...</div>;
   } else if (characters !== null && characters.length > 0 && !loading) {
     main = (
       <Grid handleBookmark={handleBookmark} characters={characters}></Grid>
@@ -81,13 +84,15 @@ const Main = () => {
   return (
     <main>
       <header>
-        <span>Search: </span>
+        <span className="search--title">Search: </span>
         <input
+          className="search--input"
           onChange={e => handleInputChange(e)}
           value={searchInput}
-          placeholder="e. g. Spider-Man"
+          placeholder="e. g. 'Spi' or 'Spider-Man'"
         />
       </header>
+      {/* <input type="number"></input> */}
       {main}
     </main>
   );
