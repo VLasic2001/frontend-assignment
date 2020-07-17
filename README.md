@@ -16,3 +16,5 @@ Run the application with
 ```bash
 npm start
 ```
+
+The task is also deployed on netlify on this link: https://marvel-search-assignment.netlify.app/
